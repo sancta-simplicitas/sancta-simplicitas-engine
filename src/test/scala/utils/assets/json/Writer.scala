@@ -5,20 +5,21 @@ import model.Character
 import model.View
 import java.io.File
 
-interface Writer {
+trait Writer {
     val uuid: String
 
-    fun save() {
+    def save() {
         uuid
         var path = "./assets/"
-        val jsonString :String = GsonBuilder()
+        val jsonString :String = new GsonBuilder()
                                 .setPrettyPrinting()
                                 .create()
                                 .toJson(this)
-        when (this) {
-            is Character -> path += "character"
-            is View -> path += "view"
+        this match {
+            case _: Character => path += "character"
+            case _: View => path += "view"
         }
         path += "/$uuid.json"
-        File(path).writeText(jsonString)}
+        new File(path).writeText(jsonString)
+    }
 }
